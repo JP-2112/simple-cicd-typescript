@@ -1,15 +1,18 @@
 /**
- * Unit tests for sum()
- * Loads the compiled sum.js so window.sum is available (same as in the browser).
+ * Unit tests for sum(), subtract(), multiply(), divide()
+ * Loads the compiled sum.js so window.<fn> is available (same as in the browser).
  */
 declare global {
   interface Window {
     sum: (a: number, b: number) => number;
+    subtract: (a: number, b: number) => number;
+    multiply: (a: number, b: number) => number;
+    divide: (a: number, b: number) => number;
   }
 }
 
 beforeAll(() => {
-  // Load the built script that attaches sum to window (non-module)
+  // Load the built script that attaches the functions to window (non-module)
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   require("./sum.js");
 });
@@ -25,6 +28,48 @@ describe("sum", () => {
 
   it("returns 0 when both are 0", () => {
     expect(window.sum(0, 0)).toBe(0);
+  });
+});
+
+describe("subtract", () => {
+  it("subtracts two positive numbers", () => {
+    expect(window.subtract(5, 3)).toBe(2);
+  });
+
+  it("subtracts to a negative result", () => {
+    expect(window.subtract(3, 5)).toBe(-2);
+  });
+
+  it("returns 0 when both are 0", () => {
+    expect(window.subtract(0, 0)).toBe(0);
+  });
+});
+
+describe("multiply", () => {
+  it("multiplies two positive numbers", () => {
+    expect(window.multiply(4, 3)).toBe(12);
+  });
+
+  it("multiplies by zero", () => {
+    expect(window.multiply(4, 0)).toBe(0);
+  });
+
+  it("multiplies negative numbers", () => {
+    expect(window.multiply(-4, 3)).toBe(-12);
+  });
+});
+
+describe("divide", () => {
+  it("divides two positive numbers", () => {
+    expect(window.divide(10, 2)).toBe(5);
+  });
+
+  it("divides negative numbers", () => {
+    expect(window.divide(-10, 2)).toBe(-5);
+  });
+
+  it("throws when dividing by zero", () => {
+    expect(() => window.divide(10, 0)).toThrow("Cannot divide by zero");
   });
 });
 
